@@ -38,7 +38,8 @@
         vpc_id: "{{vpcoutvariable.vpc.id}}"
         # reference to the above module
         region: "{{region}}"
-        zone: "{{zone1}}"
+        az: "{{zone1}}"
+        # zone is not supported. It is called az for availability zone now.
         state: "{{state}}"
         cidr: "{{PubSub1Cidr}}"
         # all of these variables are assigned values in var/vpc_setup
