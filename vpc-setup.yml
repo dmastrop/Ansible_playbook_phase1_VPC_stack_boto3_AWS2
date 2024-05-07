@@ -108,7 +108,7 @@
         state: "{{state}}"
         cidr: "{{PrivSub1Cidr}}"
         # all of these variables are assigned values in var/vpc_setup
-        map_public: yes
+        #map_public: yes
         # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
         resource_tags: 
           Name: vprofile-privsub1
@@ -128,7 +128,7 @@
         state: "{{state}}"
         cidr: "{{PrivSub2Cidr}}"
         # all of these variables are assigned values in var/vpc_setup
-        map_public: yes
+        #map_public: yes
         # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
         resource_tags: 
           Name: vprofile-privsub2
@@ -148,7 +148,7 @@
         state: "{{state}}"
         cidr: "{{PrivSub3Cidr}}"
         # all of these variables are assigned values in var/vpc_setup
-        map_public: yes
+        #map_public: yes
         # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
         resource_tags: 
           Name: vprofile-privsub3
