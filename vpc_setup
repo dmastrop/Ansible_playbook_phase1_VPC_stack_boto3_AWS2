@@ -1,0 +1,29 @@
+# This is the variables file for the VPC
+
+vpc_name: "Vprofile-vpc"
+
+# VCP Range
+vpcCidr: '172.20.0.0/16'
+
+# Subnet Ranges. With AWS reserved host ip addresses, each subnet will have about 251 host addresses
+PubSub1Cidr: 172.20.1.0/24
+PubSub2Cidr: 172.20.2.0/24
+PubSub3Cidr: 172.20.3.0/24
+
+PrivSub1Cidr: 172.20.4.0/24
+PrivSub2Cidr: 172.20.5.0/24
+PrivSub3Cidr: 172.20.6.0/24
+
+# Region Name. Note double quotes not mandatory but using it because hyphens.
+region: "us-east-1"
+
+# Across three zones
+zone1: us-east-1a
+zone2: us-east-1b
+zone3: us-east-1c
+
+
+state: present
+
+
+
