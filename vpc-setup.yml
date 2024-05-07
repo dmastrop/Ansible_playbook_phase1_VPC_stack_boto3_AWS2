@@ -96,6 +96,64 @@
       register: pubsub3_out_variable
 
 
-      
+    - name: Create PrivateSubnet 1 in Zone 1
+      ec2_vpc_subnet:
+      # this module is used to create subnets in the VPC
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        # reference to the above module
+        region: "{{region}}"
+        az: "{{zone1}}"
+        # zone is not supported. It is called az for availability zone now.
+        state: "{{state}}"
+        cidr: "{{PrivSub1Cidr}}"
+        # all of these variables are assigned values in var/vpc_setup
+        map_public: yes
+        # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
+        resource_tags: 
+          Name: vprofile-privsub1
+
+      register: privsub1_out_variable
+
+
+    - name: Create PrivateSubnet 2 in Zone 2
+      ec2_vpc_subnet:
+      # this module is used to create subnets in the VPC
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        # reference to the above module
+        region: "{{region}}"
+        az: "{{zone2}}"
+        # zone is not supported. It is called az for availability zone now.
+        state: "{{state}}"
+        cidr: "{{PrivSub2Cidr}}"
+        # all of these variables are assigned values in var/vpc_setup
+        map_public: yes
+        # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
+        resource_tags: 
+          Name: vprofile-privsub2
+
+      register: privsub2_out_variable
+
+
+    - name: Create PrivateSubnet 3 in Zone 3
+      ec2_vpc_subnet:
+      # this module is used to create subnets in the VPC
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        # reference to the above module
+        region: "{{region}}"
+        az: "{{zone3}}"
+        # zone is not supported. It is called az for availability zone now.
+        state: "{{state}}"
+        cidr: "{{PrivSub3Cidr}}"
+        # all of these variables are assigned values in var/vpc_setup
+        map_public: yes
+        # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
+        resource_tags: 
+          Name: vprofile-privsub3
+
+      register: privsub3_out_variable
+
 
 
