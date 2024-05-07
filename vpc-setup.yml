@@ -1,0 +1,26 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Import VPC Variables
+      include_vars: vars/vpc_setup
+      # the hierarchy is bastion_setup and vpc_setup var files are in /var directory. The files do not have to be in a separate file.
+      # always preferable to use vars files so that the code (below for example) is fully reusable across different implementations
+    
+    - name: Create vprofile VPC
+      ec2_vpc_net:
+      # this is the module to create the VPC networks. variables always use the double {{}} syntax to reference them
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_net_module.html
+
+        name: "{{vpc_name}}"
+        vpc_name is from the vpc_setup vars file
+        cidr_block: "{{vpcCidr}}"
+        region: "{{region}}"
+        dns_support: yes
+        dns_hostnames: yes
+        tenancy: default
+        state: "{{state}}"
+
+      register: vpcoutvariable
+
+
