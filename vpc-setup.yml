@@ -56,6 +56,46 @@
         # this debug module task will output the public subnet1 module's contents to the terminal 
 
 
+    - name: Create PublicSubnet 2 in Zone 2
+      ec2_vpc_subnet:
+      # this module is used to create subnets in the VPC
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        # reference to the above module
+        region: "{{region}}"
+        az: "{{zone2}}"
+        # zone is not supported. It is called az for availability zone now.
+        state: "{{state}}"
+        cidr: "{{PubSub2Cidr}}"
+        # all of these variables are assigned values in var/vpc_setup
+        map_public: yes
+        # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
+        resource_tags: 
+          Name: vprofile-pubsub2
 
+      register: pubsub2_out_variable
+
+
+    - name: Create PublicSubnet 3 in Zone 3
+      ec2_vpc_subnet:
+      # this module is used to create subnets in the VPC
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        # reference to the above module
+        region: "{{region}}"
+        az: "{{zone3}}"
+        # zone is not supported. It is called az for availability zone now.
+        state: "{{state}}"
+        cidr: "{{PubSub3Cidr}}"
+        # all of these variables are assigned values in var/vpc_setup
+        map_public: yes
+        # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
+        resource_tags: 
+          Name: vprofile-pubsub3
+
+      register: pubsub3_out_variable
+
+
+      
 
 
