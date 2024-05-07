@@ -23,6 +23,7 @@ zone2: us-east-1b
 zone3: us-east-1c
 
 
+# The state can be present or absent Present will create the object or instance and absent will remove the object or instance
 state: present
 
 

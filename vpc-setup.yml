@@ -7,7 +7,8 @@
       # the hierarchy is bastion_setup and vpc_setup var files are in /var directory. The files do not have to be in a separate file.
       # always preferable to use vars files so that the code (below for example) is fully reusable across different implementations
     
-    - name: Create vprofile VPC
+
+    - name: Create vprofile VPC task
       ec2_vpc_net:
       # this is the module to create the VPC networks. variables always use the double {{}} syntax to reference them
       # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_net_module.html
@@ -22,5 +23,35 @@
         state: "{{state}}"
 
       register: vpcoutvariable
+      # this registers this module's contents as variable vpcoutvariable so that we can reference it in other modules
+
+
+    - debug:
+        var: vpcoutvariable
+        # this debug module task will output the module's contents to the terminal 
+
+
+    - name: Create PublicSubnet 1 in Zone 1
+        ec2_vpc_subnet:
+        # this module is used to create subnets in the VPC
+        # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+          vpc_id: "{{vpcoutvariable.vpc.id}}"
+          # reference to the above module
+          region: "{{region}}"
+          zone: "{{zone1}}"
+          state: "{{state}}"
+          cidr: "{{PubSub1Cidr}}"
+          # all of these variables are assigned values in var/vpc_setup
+          map_public: yes
+          # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
+          resource_tags: 
+            Name: vprofile-pubsub1
+
+        register: pubsub1_out_variable
+
+
+
+
+
 
 
