@@ -13,7 +13,7 @@
       # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_net_module.html
 
         name: "{{vpc_name}}"
-        vpc_name is from the vpc_setup vars file
+        # vpc_name is from the vpc_setup vars file
         cidr_block: "{{vpcCidr}}"
         region: "{{region}}"
         dns_support: yes
