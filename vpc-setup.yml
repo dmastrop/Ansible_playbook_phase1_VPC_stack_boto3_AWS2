@@ -32,22 +32,22 @@
 
 
     - name: Create PublicSubnet 1 in Zone 1
-        ec2_vpc_subnet:
-        # this module is used to create subnets in the VPC
-        # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
-          vpc_id: "{{vpcoutvariable.vpc.id}}"
-          # reference to the above module
-          region: "{{region}}"
-          zone: "{{zone1}}"
-          state: "{{state}}"
-          cidr: "{{PubSub1Cidr}}"
-          # all of these variables are assigned values in var/vpc_setup
-          map_public: yes
-          # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
-          resource_tags: 
-            Name: vprofile-pubsub1
+      ec2_vpc_subnet:
+      # this module is used to create subnets in the VPC
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        # reference to the above module
+        region: "{{region}}"
+        zone: "{{zone1}}"
+        state: "{{state}}"
+        cidr: "{{PubSub1Cidr}}"
+        # all of these variables are assigned values in var/vpc_setup
+        map_public: yes
+        # map_public will map a public ip address to the subnet.  For public we need this for routing out to the internet
+        resource_tags: 
+          Name: vprofile-pubsub1
 
-        register: pubsub1_out_variable
+      register: pubsub1_out_variable
 
 
 
