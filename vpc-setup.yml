@@ -51,6 +51,9 @@
       register: pubsub1_out_variable
 
 
+    - debug:
+        var: pubsub1_out_variable
+        # this debug module task will output the public subnet1 module's contents to the terminal 
 
 
 
