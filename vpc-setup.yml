@@ -250,3 +250,20 @@
         # this debug module task will output the Private subnet routing table module's contents to the terminal 
 
 
+    - debug:
+      var: "{{item}}"
+
+      loop:
+      # list all the ID's you want to store in the vars file
+      # This will print out in debug
+        - vpcoutvariable.vpc.id
+        - pubsub1_out_variable.subnet.id
+        - pubsub2_out_variable.subnet.id
+        - pubsub3_out_variable.subnet.id
+        - privsub1_out_variable.subnet.id
+        - privsub2_out_variable.subnet.id
+        - privsub3_out_variable.subnet.id
+        - igw_out_variable.gateway_id
+        - publicroutingtable_out_variable.route_table.id
+        - NATGW_out_variable.nat_gateway_id
+        - privateroutingtable_out_variable.route_table.id
