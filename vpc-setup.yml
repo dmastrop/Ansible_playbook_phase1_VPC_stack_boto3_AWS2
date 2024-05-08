@@ -156,4 +156,17 @@
       register: privsub3_out_variable
 
 
+    - name: Create Internet Gateway Setup for public subnets
+      ec2_vpc_igw:
+      # this module creates the IGW for the pubic subnets so that they can route out via the route table.
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_igw_module.html#ansible-collections-amazon-aws-ec2-vpc-igw-module
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        region: "{{region}}"
+        state: "{{state}}"
+        resource_tags:
+          Name: vprofile_IGW
+
+      register: igw_out_variable        
+    
+
 
