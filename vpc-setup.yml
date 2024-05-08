@@ -210,6 +210,8 @@
         wait: yes
         # Wait for operation to complete before returning.
         region: "{{region}}"
+        resource_tags:
+          Name: vprofile_NATGW
         if_exist_do_not_create: true
         # if a NAT Gateway exists already in the subnet_id, then do not create a new one.  Otherwise it will create a NAT GW each time the playbook is executed.
 
