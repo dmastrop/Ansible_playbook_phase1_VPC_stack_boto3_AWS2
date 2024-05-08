@@ -35,7 +35,7 @@
     - name: store private key in file bastion-key.pem
       copy:
         content: "{{key_out_variable.key.private_key}}"
-        dest: ./bastion-key.pem
+        dest: ../keys_and_credentials/bastion-key.pem
         mode: 0600
       when: key_out_variable.changed
       # only do this Task if the key is changed. Otherwise do not store the private key as it is already there.
