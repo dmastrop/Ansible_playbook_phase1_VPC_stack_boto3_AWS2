@@ -11,5 +11,96 @@ Create the remote repository and push the code to the remote repository
 
 initialize git on the project folder on the ansibile-EC2-project21 folder home/ubuntu/vpc-stack-vprofile and git remote add origin to the remote git repository above.
 
-##
 
+
+
+
+
+# Ansible modules for VPC on AWS. Ansible playbook vpc-setup.yml
+
+
+First create the VPC.  ec2_vpc_net
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_net_module.html
+
+
+Then create the public subnets 1,2,3.  ec2_vpc_subnet
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+
+
+Create private subnets 1,2,3.   ec2_vpc_subnet
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_module.html
+
+
+Create Internet Gateway (IGW).   ec2_vpc_igw
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_igw_module.html#ansible-collections-amazon-aws-ec2-vpc-igw-module
+
+
+Public subnet route table (to IGW).   ec2_vpc_route_table
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_route_table_module.html#ansible-collections-amazon-aws-ec2-vpc-route-table-module
+
+
+Create the NAT GW in public subnet to be used by the private subnet. ALlocate an Elastic IP (EIP)  ec2_vpc_nat_gateway
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_nat_gateway_module.html#ansible-collections-amazon-aws-ec2-vpc-nat-gateway-module
+
+
+Private subnet route table (to NATGW).   ec2_vpc_route_table
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_route_table_module.html#ansible-collections-amazon-aws-ec2-vpc-route-table-module
+
+
+Use debug module throughout the playbook to help troubleshoot any syntax coding issues.
+
+
+
+
+
+# Create output of all the IDs for the objects above so that we can use the IDs to create a bastion host
+
+The code below is for this purpose. This is in the vpc-setup.yml ansible playbook:
+- debug:
+        var: "{{item}}"
+
+      loop:
+      # list all the ID's you want to store in the vars file
+      # This will print out in debug
+        - vpcoutvariable.vpc.id
+        - pubsub1_out_variable.subnet.id
+        - pubsub2_out_variable.subnet.id
+        - pubsub3_out_variable.subnet.id
+        - privsub1_out_variable.subnet.id
+        - privsub2_out_variable.subnet.id
+        - privsub3_out_variable.subnet.id
+        - igw_out_variable.gateway_id
+        - publicroutingtable_out_variable.route_table.id
+        - NATGW_out_variable.nat_gateway_id
+        - privateroutingtable_out_variable.route_table.id
+
+
+    - set_fact:
+    # set the ids above as fact variables
+        vpcid: "{{vpcoutvariable.vpc.id}}"
+        pubsub1id: "{{ pubsub1_out_variable.subnet.id }}"
+        pubsub2id: "{{ pubsub2_out_variable.subnet.id }}"
+        pubsub3id: "{{ pubsub3_out_variable.subnet.id }}"
+        privsub1id: "{{ privsub1_out_variable.subnet.id }}"
+        privsub2id: "{{ privsub2_out_variable.subnet.id }}"
+        privsub3id: "{{ privsub3_out_variable.subnet.id }}"
+        igwid: "{{ igw_out_variable.gateway_id }}"
+        pubRTid: "{{ publicroutingtable_out_variable.route_table.id }}"
+        NATGWid: "{{ NATGW_out_variable.nat_gateway_id }}"
+        privRTid: "{{ privateroutingtable_out_variable.route_table.id }}"
+        cacheable: yes
+        # cacheable means that these vars are added to fact cache.
+        # These permit the ids to be used during runtime execution of the playbooks.
+
+
+    - name: Create variables file for vpc output IDs
+      copy:
+        content: "vpcid: {{vpcoutvariable.vpc.id}}\npubsub1id: {{ pubsub1_out_variable.subnet.id }}\npubsub2id: {{ pubsub2_out_variable.subnet.id }}\npubsub3id: {{ pubsub3_out_variable.subnet.id }}\nprivsub1id: {{ privsub1_out_variable.subnet.id }}\nprivsub2id: {{ privsub2_out_variable.subnet.id }}\nprivsub3id: {{ privsub3_out_variable.subnet.id }}\nigwid: {{ igw_out_variable.gateway_id }}\npubRTid: {{ publicroutingtable_out_variable.route_table.id }}\nNATGWid: {{ NATGW_out_variable.nat_gateway_id }}\nprivRTid: {{ privateroutingtable_out_variable.route_table.id }}\n"
+        dest: vars/output_vars_IDs
+
+
+Ultimately the vars/output_vars_IDs will be used for the second ansible playbook to create the bastion host.
+
+
+
+# Create the playbook for the bastion host.
