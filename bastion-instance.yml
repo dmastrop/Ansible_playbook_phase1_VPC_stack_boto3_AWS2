@@ -1,0 +1,16 @@
+---
+- name: Setup Vprofile Bastion apiVersion: autoscaling/v2
+  hosts: localhost
+  connection: local
+  #gather_facts: False
+  gather_facts: no
+  tasks:
+    - name: Import bastion_setup variables file
+      include_vars: vars/bastion_setup
+
+    - name: Import the vars/output_vars file with all of the AWS object IDs
+      include_vars: vars/output_vars_IDs
+      # Note that this file is actually only created on the ansible EC2 instance and not on the VSCode workspace
+      # Easiest way to do this is commit the change on the ansible EC2 instance and push to remote github repo
+      # Then pull the file from the remote repo to the local VSCode worksapce. Then the local workspace can do the import above.
+      
