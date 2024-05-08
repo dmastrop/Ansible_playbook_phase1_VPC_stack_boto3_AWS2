@@ -183,12 +183,12 @@
         resource_tags:
           Name: vprofile_Publicroutingtable
         subnets:
-        # this is an array of subnets
+        # this is an array of subnets.
           - "{{pubsub1_out_variable.subnet.id}}"
           - "{{pubsub2_out_variable.subnet.id}}"
           - "{{pubsub3_out_variable.subnet.id}}"
         routes:
-        # this is a list of routes
+        # this is a list of routes.
           - dest: 0.0.0.0/0
             gateway_id: "{{igw_out_variable.gateway_id}}"
 
