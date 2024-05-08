@@ -36,6 +36,7 @@
       copy:
         content: "{{key_out_variable.key.private_key}}"
         dest: ../keys_and_credentials/bastion-key.pem
+        # store the key up one directory level because don't want to inadvertenly push this to the github repo.
         mode: 0600
       when: key_out_variable.changed
       # only do this Task if the key is changed. Otherwise do not store the private key as it is already there.
