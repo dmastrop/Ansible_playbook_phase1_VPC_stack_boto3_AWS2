@@ -8,4 +8,4 @@ region: us-east-1
 # I will use a subnet of My IP
 MYIP: 73.202.0.0/16
 
-bastionIP: 54.85.147.25/32
+ansibleEC2IP: 54.85.147.25/32
