@@ -58,6 +58,11 @@
             cidr_ip: "{{MYIP}}"
             # this is from the bastion_setup vars file.
 
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{bastion_IP}}"
+
       register: BastionSG_out_variable
 
 
