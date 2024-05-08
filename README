@@ -9,9 +9,12 @@ Create a local workspace on VSCode so that the yml playbook files can be easily 
 
 Create the remote repository and push the code to the remote repository
 
-initialize git on the project folder on the ansibile-EC2-project21 folder home/ubuntu/vpc-stack-vprofile and git remote add origin to the remote git repository above.
+initialize git on the project folder on the ansible-EC2-project21 folder home/ubuntu/vpc-stack-vprofile and git remote add origin to the remote git repository above.
 
-
+For the vars/output_vars_IDs file, this file is created on ansible-EC2-project21 only. 
+After it is created on the ansible EC2 instance do: git push origin main to remote github repo
+Then do: git pull origin main on the VSCode workspace. 
+This needs to be updated each time prior to running the bastion-instance.yml that sets up the bastion host on the VPC
 
 
 
