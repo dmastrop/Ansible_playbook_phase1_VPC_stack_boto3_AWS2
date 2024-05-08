@@ -251,7 +251,7 @@
 
 
     - debug:
-      var: "{{item}}"
+        var: "{{item}}"
 
       loop:
       # list all the ID's you want to store in the vars file
