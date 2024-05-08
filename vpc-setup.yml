@@ -198,3 +198,52 @@
     - debug:
         var: publicroutingtable_out_variable
         # this debug module task will output the public routing table module's contents to the terminal 
+
+
+    - name: Create a new NAT Gateway and allocate a new EIP(Elastic IP) if a nat gateway does not yet exist in the subnet
+      ec2_vpc_nat_gateway:
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_nat_gateway_module.html#ansible-collections-amazon-aws-ec2-vpc-nat-gateway-module
+        state: "{{state}}"
+        subnet_id: "{{pubsub1_out_variable.subnet.id}}"
+        # The id of the subnet to create the NAT Gateway in. We have 3 private subnets. In reality there would be 3 NAT GW for high availablity
+        # but this is very expensive. For this project we will use just one and all the traffic will have to NAT out this GW.
+        wait: yes
+        # Wait for operation to complete before returning.
+        region: "{{region}}"
+        if_exist_do_not_create: true
+        # if a NAT Gateway exists already in the subnet_id, then do not create a new one.  Otherwise it will create a NAT GW each time the playbook is executed.
+
+      register: NATGW_out_variable
+
+
+    - debug:
+        var: NATGW_out_variable
+        # this debug module task will output the NATGW module's contents to the terminal 
+
+
+    - name: Set up the Private subnet route table (explicit)  (Right now there is a default but not explicit)
+      ec2_vpc_route_table:
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_route_table_module.html#ansible-collections-amazon-aws-ec2-vpc-route-table-module
+      # Similar to the public route table but this will be for private subets and will use the NAT GW above to NAT and route the traffic out via the public subnet and IGW
+       vpc_id: "{{vpcoutvariable.vpc.id}}"
+       region: "{{region}}"
+       resource_tags:
+         Name: vprofile_Privateroutingtable
+       subnets:
+       # this is an array of subnets.
+         - "{{privsub1_out_variable.subnet.id}}"
+         - "{{privsub2_out_variable.subnet.id}}"
+         - "{{privsub3_out_variable.subnet.id}}"
+       routes:
+       # this is a list of routes.
+         - dest: 0.0.0.0/0
+           gateway_id: "{{NATGW_out_variable.nat_gateway.id}}"
+
+      register: privateroutingtable_out_variable   
+
+
+    - debug:
+        var: privateroutingtable_out_variable
+        # this debug module task will output the Private subnet routing table module's contents to the terminal 
+
+
