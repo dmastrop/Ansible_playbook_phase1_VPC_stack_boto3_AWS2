@@ -104,6 +104,8 @@
         group_id: "{{BastionSG_out_variable.group_id}}"
         # This is the security group id. This is from task above BastionSG_out_variable above
         # BastionSG_out_variable.group_id is the full attribute name. See the debug for this module/task 
+        # group_id is deprecated. Use security_group
+        security_group: "{{BastionSG_out_variable.group_id}}"
 
         vpc_subnet_id: "{{pubsub1id}}"
         # this is from the imported vars/output_vars_IDs file for first public subnet
