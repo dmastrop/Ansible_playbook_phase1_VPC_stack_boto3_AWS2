@@ -1,5 +1,5 @@
 ---
-- name: Setup Vprofile Bastion apiVersion: autoscaling/v2
+- name: Setup Vprofile Bastion apiVersion 
   hosts: localhost
   connection: local
   #gather_facts: False
@@ -7,10 +7,109 @@
   tasks:
     - name: Import bastion_setup variables file
       include_vars: vars/bastion_setup
+      # all variables below will be from this file.
+
 
     - name: Import the vars/output_vars file with all of the AWS object IDs
       include_vars: vars/output_vars_IDs
       # Note that this file is actually only created on the ansible EC2 instance and not on the VSCode workspace
       # Easiest way to do this is commit the change on the ansible EC2 instance and push to remote github repo
-      # Then pull the file from the remote repo to the local VSCode worksapce. Then the local workspace can do the import above.
-      
+      # Then pull the file from the remote repo to the local VSCode worksapce. Then the local workspace can do the import above
+      # with the latest IDs
+
+    
+    - name: vprofile bastion EC2 key
+    # create the private pem key for the bastion EC2 instance
+      ec2_key:
+        name: vprofile-bastion-key
+        region: "{{region}}"
+        # this is from the bastion_setup vars file
+
+      register: key_out_variable
+
+
+    - debug:
+        var: key_out_variable
+
+
+    - name: store private key in file bastion-key.pem
+      copy:
+        content: "{{key_out_variable.key.private_key}}"
+        dest: ./bastion-key.pem
+        mode: 0600
+      when: key_out_variable.changed
+      # only do this Task if the key is changed. Otherwise do not store the private key as it is already there.
+
+
+    - name: Create the security group for the bastion host
+      ec2_group:
+      # also called ec2_security_group alias
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_security_group_module.html#ansible-collections-amazon-aws-ec2-security-group-module
+        name: Bastion-host-sg
+        description: Allow port 22 from MYIP and any other ports within the security group
+        region: "{{region}}"
+        # this is from the bastion_setup vars file
+        vpc_id: "{{vpcid}}"
+        # this variable is from the imported vars/output_vars_IDs file
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{MYIP}}"
+            # this is from the bastion_setup vars file.
+
+        register: BastionSG_out_variable
+
+
+    - debug:
+        var: BastionSG_out_variable
+
+
+    - name: Creating the Bastion host EC2 instance in the region and PubSub1
+      ec2:
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_instance_module.html  
+      # NOTE: ec2 is older and was meant to deploy x instances, whereas ec2_instance is newer and behaves declarative 
+      # like other Ansible modules. ec2 was meant to be deprecated at some point but due to enterprise dependencies and customers using it heavily, 
+      # it is still around and will not go away for some time.
+        key_name: key_out_variable.name
+        region: "{{region}}"
+        instance_type: t2.micro
+        image: "{{bastion_ami}}"
+        # this is from the bastion-setup vars file
+        wait: yes
+        # wait until it is healthy
+        wait_timeout: 300
+
+        instance_tags:
+        # The parameter “instance_tags” is used to apply tags to the newly created instance
+          Name: "Bastion_host"
+          Project: Vprofile
+          Owner: DevOps Team
+
+        exact_count : 1
+        # Everytime playbook is run this will create a new instance. We don't want that:
+        # this uses the count_tag below to determine if the instance is created already. If so, it will not create
+        # a new instance.
+        count_tag:
+        # count_tag is only supported in ec2 and not ec2_instance module
+          Name: "Bastion_host"
+          Project: Vprofile
+          Owner: DevOps Team
+        
+        group_id: "{{BastionSG_out_variable.group_id}}"
+        # This is the security group id. This is from task above BastionSG_out_variable above
+        # BastionSG_out_variable.group_id is the full attribute name. See the debug for this module/task 
+
+      register: bastionHost_out_variable
+
+    
+    - debug:
+        var: bastionHost_out_variable
+
+
+
+
+
+
+
+
