@@ -66,7 +66,7 @@
 
 
     - name: Creating the Bastion host EC2 instance in the region and PubSub1
-      ec2:
+      ec2_instance:
       # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_instance_module.html  
       # NOTE: ec2 is older and was meant to deploy x instances, whereas ec2_instance is newer and behaves declarative 
       # like other Ansible modules. ec2 was meant to be deprecated at some point but due to enterprise dependencies and customers using it heavily, 
