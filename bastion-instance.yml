@@ -58,7 +58,7 @@
             cidr_ip: "{{MYIP}}"
             # this is from the bastion_setup vars file.
 
-        register: BastionSG_out_variable
+      register: BastionSG_out_variable
 
 
     - debug:
