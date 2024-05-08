@@ -274,7 +274,7 @@
         vpcid: "{{vpcoutvariable.vpc.id}}"
         pubsub1id: "{{ pubsub1_out_variable.subnet.id }}"
         pubsub2id: "{{ pubsub2_out_variable.subnet.id }}"
-        pubsub3id: "{{ pubsub3_out_variable.subnet.idd }}"
+        pubsub3id: "{{ pubsub3_out_variable.subnet.id }}"
         privsub1id: "{{ privsub1_out_variable.subnet.id }}"
         privsub2id: "{{ privsub2_out_variable.subnet.id }}"
         privsub3id: "{{ privsub3_out_variable.subnet.id }}"
