@@ -67,6 +67,7 @@
 
     - name: Creating the Bastion host EC2 instance in the region and PubSub1
       ec2_instance:
+      # ISSUE 1: change ec2 to ec2_instance. ec2 is deprecated.
       # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_instance_module.html  
       # NOTE: ec2 is older and was meant to deploy x instances, whereas ec2_instance is newer and behaves declarative 
       # like other Ansible modules. ec2 was meant to be deprecated at some point but due to enterprise dependencies and customers using it heavily, 
@@ -77,7 +78,7 @@
 
         #image: "{{bastion_ami}}"
         # this is from the bastion-setup vars file
-        # this is deprecated. Use either image_id or image: and then id: under it.
+        # ISSUE 2: this is deprecated. Use either image_id or image: and then id: under it.
         image:
           id: "{{bastion_ami}}"
 
@@ -85,7 +86,9 @@
         # wait until it is healthy
         wait_timeout: 300
 
-        instance_tags:
+        # ISSUE 4: instance_tags is deprecated. Use tags or resource_tags instead
+        #instance_tags:
+        tags:
         # The parameter “instance_tags” is used to apply tags to the newly created instance
           Name: "Bastion_host"
           Project: Vprofile
@@ -95,8 +98,11 @@
         # Everytime playbook is run this will create a new instance. We don't want that:
         # this uses the count_tag below to determine if the instance is created already. If so, it will not create
         # a new instance.
-        count_tag:
+
+        # ISSUE 5: Replace count_tag with filters
+        #count_tag:
         # count_tag is only supported in ec2 and not ec2_instance module
+        filters:
           Name: "Bastion_host"
           Project: Vprofile
           Owner: DevOps Team
@@ -104,7 +110,7 @@
         #group_id: "{{BastionSG_out_variable.group_id}}"
         # This is the security group id. This is from task above BastionSG_out_variable above
         # BastionSG_out_variable.group_id is the full attribute name. See the debug for this module/task 
-        # group_id is deprecated. Use security_group
+        # ISSUE 3: group_id is deprecated. Use security_group
         security_group: "{{BastionSG_out_variable.group_id}}"
 
         vpc_subnet_id: "{{pubsub1id}}"
