@@ -99,13 +99,11 @@
         # this uses the count_tag below to determine if the instance is created already. If so, it will not create
         # a new instance.
 
-        # ISSUE 5: Replace count_tag with filters
-        #count_tag:
-        # count_tag is only supported in ec2 and not ec2_instance module
-        filters:
-          Name: "Bastion_host"
-          Project: Vprofile
-          Owner: DevOps Team
+        # ISSUE 5: count_tag is only supported in ec2 and not ec2_instance module
+        # count_tag:
+        #   Name: "Bastion_host"
+        #   Project: Vprofile
+        #   Owner: DevOps Team
         
         #group_id: "{{BastionSG_out_variable.group_id}}"
         # This is the security group id. This is from task above BastionSG_out_variable above
