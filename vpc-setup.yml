@@ -237,7 +237,8 @@
        routes:
        # this is a list of routes.
          - dest: 0.0.0.0/0
-           gateway_id: "{{NATGW_out_variable.nat_gateway.id}}"
+           #gateway_id: "{{NATGW_out_variable.nat_gateway.id}}"
+           gateway_id: "{{NATGW_out_variable.nat_gateway_id}}"
 
       register: privateroutingtable_out_variable   
 
