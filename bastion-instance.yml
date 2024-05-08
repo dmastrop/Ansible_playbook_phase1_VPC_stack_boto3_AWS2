@@ -74,8 +74,13 @@
         key_name: key_out_variable.name
         region: "{{region}}"
         instance_type: t2.micro
-        image: "{{bastion_ami}}"
+
+        #image: "{{bastion_ami}}"
         # this is from the bastion-setup vars file
+        # this is deprecated. Use either image_id or image: and then id: under it.
+        image:
+          id: "{{bastion_ami}}"
+
         wait: yes
         # wait until it is healthy
         wait_timeout: 300
