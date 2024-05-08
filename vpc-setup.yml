@@ -169,4 +169,32 @@
       register: igw_out_variable        
     
 
+    - debug:
+        var: igw_out_variable
+        # this debug module task will output the igw module's contents to the terminal 
 
+
+    - name: Set up the public subnet route table to point to IGW above for default route
+      ec2_vpc_route_table:
+      # this module creates the route table so that the public subnet can route out via the IGW for all default routes
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_route_table_module.html#ansible-collections-amazon-aws-ec2-vpc-route-table-module
+        vpc_id: "{{vpcoutvariable.vpc.id}}"
+        region: "{{region}}"
+        resource_tags:
+          Name: vprofile_Publicroutingtable
+        subnets:
+        # this is an array of subnets
+          - "{{pubsub1_out_variable.subnet.id}}"
+          - "{{pubsub2_out_variable.subnet.id}}"
+          - "{{pubsub3_out_variable.subnet.id}}"
+        routes:
+        # this is a list of routes
+          - dest: 0.0.0.0/0
+            gateway_id: "{{igw_out_variable.gateway_id}}"
+
+      register: publicroutingtable_out_variable
+
+
+    - debug:
+        var: publicroutingtable_out_variable
+        # this debug module task will output the public routing table module's contents to the terminal 
