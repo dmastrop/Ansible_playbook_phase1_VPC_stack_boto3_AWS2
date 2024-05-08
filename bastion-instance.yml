@@ -100,6 +100,9 @@
         # This is the security group id. This is from task above BastionSG_out_variable above
         # BastionSG_out_variable.group_id is the full attribute name. See the debug for this module/task 
 
+        vpc_subnet_id: "{{pubsub1id}}"
+        # this is from the imported vars/output_vars_IDs file for first public subnet
+
       register: bastionHost_out_variable
 
     
