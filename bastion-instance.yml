@@ -72,7 +72,7 @@
       # NOTE: ec2 is older and was meant to deploy x instances, whereas ec2_instance is newer and behaves declarative 
       # like other Ansible modules. ec2 was meant to be deprecated at some point but due to enterprise dependencies and customers using it heavily, 
       # it is still around and will not go away for some time.
-        key_name: key_out_variable.key.name
+        key_name: "{{key_out_variable.key.name}}"
         region: "{{region}}"
         instance_type: t2.micro
 
