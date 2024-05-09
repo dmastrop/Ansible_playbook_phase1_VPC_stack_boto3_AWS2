@@ -14,8 +14,7 @@
       include_vars: vars/output_vars_IDs
       # Note that this file is actually only created on the ansible EC2 instance and not on the VSCode workspace
       # Easiest way to do this is commit the change on the ansible EC2 instance and push to remote github repo
-      # Then pull the file from the remote repo to the local VSCode worksapce. Then the local workspace can do the import above
-      # with the latest IDs
+      # Then pull the file from the remote repo to the local VSCode worksapce. Then the local VSCode will have the latest code.
 
     
     - name: vprofile bastion EC2 key
@@ -119,6 +118,7 @@
 
         vpc_subnet_id: "{{pubsub1id}}"
         # this is from the imported vars/output_vars_IDs file for first public subnet
+        # the VPC ID vpcid variable is imported above.
 
       register: bastionHost_out_variable
 

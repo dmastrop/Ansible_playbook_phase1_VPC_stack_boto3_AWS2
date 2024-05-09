@@ -107,4 +107,71 @@ Ultimately the vars/output_vars_IDs will be used for the second ansible playbook
 
 
 
-# Create the playbook for the bastion host.
+# Create the playbook for the bastion host bastion-instance.yml
+
+This will use the vars/output-vars_IDs from above as well as variables in bastion_setup file (ami id, etc)
+
+Note ec2 module is deprecated. Must use the ec2_instance module.
+
+Use this reference to construct the ec2_instance module task in the bastion-instance.yml file
+https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_instance_module.html
+
+For the pem rsa security key make sure to store it one directory up from the repository directory in the ansible-EC2-project21 instance
+
+This is the ec2_instance module task
+
+    - name: Creating the Bastion host EC2 instance in the region and PubSub1
+      ec2_instance:
+      # ISSUE 1: change ec2 to ec2_instance. ec2 is deprecated.
+      # https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_instance_module.html  
+      # NOTE: ec2 is older and was meant to deploy x instances, whereas ec2_instance is newer and behaves declarative 
+      # like other Ansible modules. ec2 was meant to be deprecated at some point but due to enterprise dependencies and customers using it heavily, 
+      # it is still around and will not go away for some time.
+        key_name: "{{key_out_variable.key.name}}"
+        region: "{{region}}"
+        instance_type: t2.micro
+
+        #image: "{{bastion_ami}}"
+        # this is from the bastion-setup vars file
+        # ISSUE 2: this is deprecated. Use either image_id or image: and then id: under it.
+        image:
+          id: "{{bastion_ami}}"
+
+        wait: yes
+        # wait until it is healthy
+        wait_timeout: 300
+
+        # ISSUE 4: instance_tags is deprecated. Use tags or resource_tags instead
+        #instance_tags:
+        tags:
+        # The parameter “instance_tags” is used to apply tags to the newly created instance
+          Name: "Bastion_host"
+          Project: Vprofile
+          Owner: DevOps Team
+
+        exact_count : 1
+        # Everytime playbook is run this will create a new instance. We don't want that:
+        # this uses the count_tag below to determine if the instance is created already. If so, it will not create
+        # a new instance.
+
+        # ISSUE 5: count_tag is only supported in ec2 and not ec2_instance module
+        # count_tag:
+        #   Name: "Bastion_host"
+        #   Project: Vprofile
+        #   Owner: DevOps Team
+        
+        #group_id: "{{BastionSG_out_variable.group_id}}"
+        # This is the security group id. This is from task above BastionSG_out_variable above
+        # BastionSG_out_variable.group_id is the full attribute name. See the debug for this module/task 
+        # ISSUE 3: group_id is deprecated. Use security_group
+        security_group: "{{BastionSG_out_variable.group_id}}"
+
+        vpc_subnet_id: "{{pubsub1id}}"
+        # this is from the imported vars/output_vars_IDs file for first public subnet
+        # the VPC ID vpcid variable is imported above.
+
+      register: bastionHost_out_variable
+
+    
+    - debug:
+        var: bastionHost_out_variable
